@@ -38,13 +38,17 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
-## Running application
+## Running Application and Database
 
 ```bash
 docker compose up -d
 ```
 
-## Seed employee
+Application is running on [http://localhost:3000](http://localhost:3000)
+
+Mongo-express is running on [http://localhost:8081](http://localhost:8081)
+
+## Seed Employee Data
 ```bash
 curl -X GET http://localhost:3000/api/employee/seed
 ```

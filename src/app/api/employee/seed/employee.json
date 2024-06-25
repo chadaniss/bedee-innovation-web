@@ -1,0 +1,42 @@
+[
+  {
+    "employeeId": "50001",
+    "firstName": "John",
+    "lastName": "Doe",
+    "department": "Product Development",
+    "activeDate": "2019-01-01",
+    "activeTime": "08:00:00"
+  },
+  {
+    "employeeId": "50002",
+    "firstName": "Steve",
+    "lastName": "Smith",
+    "department": "Marketing",
+    "activeDate": "2020-02-02",
+    "activeTime": "09:00:00"
+  },
+  {
+    "employeeId": "50003",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "department": "Product Development",
+    "activeDate": "2021-12-12",
+    "activeTime": "10:00:00"
+  },
+  {
+    "employeeId": "50004",
+    "firstName": "Peter",
+    "lastName": "Jones",
+    "department": "Customer Service",
+    "activeDate": "2022-04-04",
+    "activeTime": "11:00:00"
+  },
+  {
+    "employeeId": "50005",
+    "firstName": "Tom",
+    "lastName": "Brown",
+    "department": "Product Development",
+    "activeDate": "2023-03-03",
+    "activeTime": "12:00:00"
+  }
+]

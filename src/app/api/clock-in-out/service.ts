@@ -34,18 +34,27 @@ async function findTodayRecords(
   }).toArray();
 }
 
+function toDateTime(timestamp: Date) {
+  return {
+    date: dayjs(timestamp).tz().format('YYYY-MM-DD'),
+    time: dayjs(timestamp).tz().format('HH:mm:ss')
+  };
+}
+
 function toInsertData(
   employeeId: string,
   employee: object,
   timestamp: Date,
   type: string,
 ) {
+  const { date, time } = toDateTime(timestamp);
+
   return {
     employeeId,
     employee,
     timestamp,
-    date: dayjs(timestamp).tz().format('YYYY-MM-DD'),
-    time: dayjs(timestamp).tz().format('HH:mm:ss'),
+    date,
+    time,
     type
   };
 }
@@ -77,12 +86,15 @@ async function updateCheckOut(
   timestamp: Date
 ) {
   const collection = await getCollection();
+  const { date, time } = toDateTime(timestamp);
 
   return collection.updateOne(
     { _id },
     {
       $set: {
         timestamp,
+        date,
+        time,
         type: 'OUT'
       }
     }

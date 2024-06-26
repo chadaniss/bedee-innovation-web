@@ -37,3 +37,8 @@ next-env.d.ts
 
 # database
 mongo
+
+# images
+camera/**/*.jpeg
+camera/**/*.jpg
+camera/**/*.png

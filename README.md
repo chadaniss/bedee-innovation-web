@@ -52,3 +52,7 @@ Mongo-express is running on [http://localhost:8081](http://localhost:8081)
 ```bash
 curl -X GET http://localhost:3000/api/employee/seed
 ```
+
+## Face Recognition Camera Script
+
+[README](./camera/README.md)

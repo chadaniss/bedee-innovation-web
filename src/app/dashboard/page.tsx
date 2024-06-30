@@ -1,7 +1,6 @@
 /** @format */
 
 import PageTitle from "@/components/PageTitle";
-import Image from "next/image";
 import {
   ShieldQuestion,
   Users,
@@ -10,7 +9,7 @@ import {
 } from "lucide-react";
 import Card, { CardContent, CardProps } from "@/components/Card";
 import BarChart from "@/components/BarChart";
-import ActiveCard, { ActiveProps } from "@/components/ActiveCard";
+import RecentActive from "./recentActive";
 
 const cardData: CardProps[] = [
   {
@@ -39,35 +38,7 @@ const cardData: CardProps[] = [
   },
 ];
 
-const userActiveData: ActiveProps[] = [
-  {
-    name: "Chadanis Worapant",
-    id: "523456",
-    time: "08:02:22",
-  },
-  {
-    name: "Soravis Prommas",
-    id: "589263",
-    time: "07:59:54",
-  },
-  {
-    name: "Yossapol Witayanont",
-    id: "517809",
-    time: "07:55:29",
-  },
-  {
-    name: "Phanichpitcha Punyawiboolkit",
-    id: "576214",
-    time: "07:47:13",
-  },
-  {
-    name: "Natcha Tosilanon",
-    id: "527404",
-    time: "07:45:09",
-  },
-];
-
-export default function Home() {
+export default function Dashboard() {
   return (
     <div className="flex flex-col gap-5  w-full">
       <PageTitle title="Dashboard" />
@@ -88,22 +59,8 @@ export default function Home() {
 
           <BarChart />
         </CardContent>
-        <CardContent className="flex justify-between gap-4">
-          <section>
-            <p>Recent Active</p>
-            <p className="text-sm text-gray-400">65 active this today.</p>
-          </section>
-          {userActiveData.map((d, i) => (
-            <ActiveCard
-              key={i}
-              id={d.id}
-              name={d.name}
-              time={d.time}
-            />
-          ))}
-        </CardContent>
 
-        {/*  */}
+        <RecentActive />
       </section>
     </div>
   );

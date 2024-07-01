@@ -131,11 +131,11 @@ export async function clockInOut(
   return { message };
 }
 
-export async function getLatestActivities() {
+export async function getLatestActivities(type?: string) {
   const collection = await getCollection();
 
   return collection
-    .find({})
+    .find({ type })
     .sort({ timestamp: -1 })
     .limit(10)
     .toArray();

@@ -18,7 +18,7 @@ DETECTION_THRESHOLD = 3  # seconds
 show_success_message = False
 api_response_message = ""
 success_message_time = 0
-SUCCESS_MESSAGE_DURATION = 2  # seconds
+SUCCESS_MESSAGE_DURATION = 3  # seconds
 
 # Initialize arrays to hold face encodings and names
 known_face_encodings = []
@@ -50,11 +50,16 @@ face_locations = []
 face_encodings = []
 face_names = []
 process_this_frame = True
+last_seen_face = {}
+unknown = "Unknown"
 
 # Initialize the video capture object
 video_capture = cv2.VideoCapture(0)
 
 while True:
+    # Start measuring total processing time
+    start_time = time.time()
+
     # Grab a single frame of video
     ret, frame = video_capture.read()
 
@@ -65,19 +70,30 @@ while True:
     rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
 
     if process_this_frame:
+        # Start measuring face detection time
+        detection_start_time = time.time()
+
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(rgb_small_frame)
         face_encodings = face_recognition.face_encodings(
             rgb_small_frame, face_locations)
+        
+        # End measuring face detection time
+        detection_end_time = time.time()
+        detection_duration = detection_end_time - detection_start_time
+        print(f"Face detection took {detection_duration:.6f} seconds")
 
         # Initialize an array for the names of detected faces
         face_names = []
 
         for face_encoding in face_encodings:
+            # Start measuring face recognition time
+            recognition_start_time = time.time()
+
             # See if the face is a match for the known face(s)
             matches = face_recognition.compare_faces(
                 known_face_encodings, face_encoding)
-            name = "Unknown"
+            name = unknown
 
             # Use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(
@@ -90,25 +106,33 @@ while True:
 
             face_names.append(name)
 
+            # End measuring face recognition time
+            recognition_end_time = time.time()
+            recognition_duration = recognition_end_time - recognition_start_time
+            print(f"Face recognition took {recognition_duration:.6f} seconds")
+
             # Track face detection duration
-            if name != "Unknown":
+            if name != unknown:
                 if name not in face_detection_start_times:
                     face_detection_start_times[name] = time.time()
                 else:
                     elapsed_time = time.time() - \
                         face_detection_start_times[name]
                     if elapsed_time >= DETECTION_THRESHOLD:
-                        # Send request to API
-                        response = requests.post(
-                            api_url, json={"employeeId": name})
-                        if response.status_code == 200:
-                            print(
-                                f"Sent request to API for {name}, response: {response.status_code}")
-                            show_success_message = True
-                            response_json = response.json()
-                            message = response_json["message"]["message"]
-                            api_response_message = f"{name} is {message}"
-                            success_message_time = time.time()
+                        # Check if the face was already seen recently
+                        if name not in last_seen_face or time.time() - last_seen_face[name] > 60:
+                            # Send request to API
+                            response = requests.post(
+                                api_url, json={"employeeId": name})
+                            if response.status_code == 200:
+                                print(
+                                    f"Sent request to API for {name}, response: {response.status_code}")
+                                show_success_message = True
+                                response_json = response.json()
+                                message = response_json["message"]["message"]
+                                api_response_message = f"{name} is {message}"
+                                success_message_time = time.time()
+                                last_seen_face[name] = time.time()
 
                         # Reset the start time to prevent continuous sending
                         face_detection_start_times[name] = time.time()
@@ -127,12 +151,14 @@ while True:
         bottom *= 4
         left *= 4
 
+        color = (0, 255, 0) if name != unknown else (0, 0, 255)
+
         # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        cv2.rectangle(frame, (left, top), (right, bottom), color, 2)
 
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35),
-                      (right, bottom), (0, 0, 255), cv2.FILLED)
+                      (right, bottom), color, cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6),
                     font, 1.0, (255, 255, 255), 1)
@@ -148,6 +174,11 @@ while True:
 
     # Display the resulting image
     cv2.imshow('Video', frame)
+
+    # End measuring total processing time
+    end_time = time.time()
+    total_duration = end_time - start_time
+    print(f"Total frame processing took {total_duration:.6f} seconds")
 
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):

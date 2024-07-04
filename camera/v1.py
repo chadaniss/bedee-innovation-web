@@ -8,7 +8,12 @@ import numpy as np
 
 # Directory containing known faces
 known_faces_dir = "known_faces"
+
+# API URL for clock-in/out
 api_url = "http://localhost:3000/api/clock-in-out"
+
+# Distance threshold for face recognition
+DISTANCE_THRESHOLD = 0.4
 
 # Trackers for face detection duration
 face_detection_start_times = {}
@@ -101,7 +106,7 @@ while True:
             best_match_index = np.argmin(face_distances)
 
             if matches[best_match_index]:
-                if face_distances[best_match_index] < 0.4:
+                if face_distances[best_match_index] < DISTANCE_THRESHOLD:
                     name = known_face_names[best_match_index]
 
             face_names.append(name)

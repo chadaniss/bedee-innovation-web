@@ -31,3 +31,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'UPLOAD_FAILED' }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  const { employeeId, fileName: filePath } = await req.json();
+  if (!employeeId || !filePath) {
+    return NextResponse.json({ 
+      error: 'EMPLOYEE_ID_AND_FILE_PATH_REQUIRED'
+    }, { status: 400 });
+  }
+
+  try {
+    await unlink(filePath);
+    await updateEmployee(employeeId, { $pull: { images: filePath }});
+
+    return NextResponse.json({ message: 'IMAGE_DELETED' });
+  } catch (error) {
+    console.log('DELETE_FAILED: ', error);
+
+    return NextResponse.json({ error: 'DELETE_FAILED' }, { status: 500 });
+  }
+}

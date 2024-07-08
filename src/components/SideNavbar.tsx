@@ -2,14 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import { Nav } from "./ui/nav";
+import Nav from "./ui/nav";
 
 type Props = {};
 
 import {
-  ShoppingCart,
   LayoutDashboard,
-  UsersRound,
   Settings,
   ChevronRight,
   LogIn,
@@ -18,8 +16,9 @@ import {
 import { Button } from "./ui/button";
 
 import { useWindowWidth } from "@react-hook/window-size";
+import dynamic from "next/dynamic";
 
-export default function SideNavbar({}: Props) {
+function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const onlyWidth = useWindowWidth();
@@ -74,3 +73,5 @@ export default function SideNavbar({}: Props) {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(SideNavbar), { ssr: false });

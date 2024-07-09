@@ -26,3 +26,9 @@ export async function getEmployeeById(employeeId: string) {
 
   return collection.findOne({ employeeId });
 }
+
+export async function updateEmployee(employeeId: string, update: any) {
+  const collection = await getCollection();
+
+  return collection.updateOne({ employeeId }, update);
+}

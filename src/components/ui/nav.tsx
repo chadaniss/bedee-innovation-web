@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 
 interface NavProps {
   isCollapsed: boolean;
@@ -26,7 +27,7 @@ interface NavProps {
   }[];
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+function Nav({ links, isCollapsed }: NavProps) {
   const pathName = usePathname();
   return (
     <TooltipProvider>
@@ -102,3 +103,5 @@ export function Nav({ links, isCollapsed }: NavProps) {
     </TooltipProvider>
   );
 }
+
+export default dynamic(() => Promise.resolve(Nav), { ssr: false });

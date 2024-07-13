@@ -135,9 +135,15 @@ while True:
         else:
             show_success_message = False
 
-    cv2.imshow('Video', frame)
-    total_duration = time.time() - start_time
+    end_time = time.time()
+    total_duration = end_time - start_time
     print(f"Total frame processing took {total_duration:.6f} seconds")
+
+    # Display the FPS
+    fps = 1.0 / (end_time - start_time)
+    cv2.putText(frame, f"FPS: {fps:.2f}", (frame.shape[1] - 150, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
+    cv2.imshow('Video', frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

@@ -12,6 +12,7 @@ import {
   ChevronRight,
   LogIn,
   LogOut,
+  UsersRound,
 } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -60,6 +61,12 @@ function SideNavbar({}: Props) {
             title: "Check-Out",
             href: "/check-out",
             icon: LogOut,
+            variant: "ghost",
+          },
+          {
+            title: "User",
+            href: "/user",
+            icon: UsersRound,
             variant: "ghost",
           },
           {

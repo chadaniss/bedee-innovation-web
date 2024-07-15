@@ -7,3 +7,9 @@ export interface IEmployee {
   activeDate: string;
   activeTime: string;
 }
+
+export interface IMappedUserData {
+  name: string;
+  id: string;
+  department: string;
+}
